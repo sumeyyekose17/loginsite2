@@ -1,16 +1,16 @@
 <!doctype html>
-<html lang="tr">
+<html lang="tr" data-bs-theme="light">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Ana Sayfa</title>
 
-  <!-- Bootstrap CSS + Icons -->
+  <!-- Bootstrap & Icons -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
 
   <script>
-    // Giriş yapılmadıysa login'e dön
+    // Giriş kontrolü
     document.addEventListener("DOMContentLoaded", () => {
       if (sessionStorage.getItem("auth") !== "true") {
         window.location.href = "index.html";
@@ -19,42 +19,26 @@
   </script>
 
   <style>
-    :root{
-      --brand-start:#6a11cb;
-      --brand-end:#2575fc;
-    }
+    :root{ --brand-start:#6a11cb; --brand-end:#2575fc; }
     body{
       background: radial-gradient(1200px 600px at 80% -10%, rgba(37,117,252,.25), transparent 60%),
                   radial-gradient(900px 500px at -10% 20%, rgba(106,17,203,.25), transparent 60%),
                   #f6f7fb;
     }
-    .navbar{
-      background: linear-gradient(90deg, var(--brand-start), var(--brand-end));
-    }
-    .hero{
-      background: linear-gradient(135deg, rgba(106,17,203,.12), rgba(37,117,252,.12));
-      border: 1px solid rgba(0,0,0,.06);
-      border-radius: 20px;
-    }
-    .card-hover{
-      transition: transform .18s ease, box-shadow .18s ease;
-      border: 0;
-      border-radius: 16px;
-    }
-    .card-hover:hover{
-      transform: translateY(-4px);
-      box-shadow: 0 12px 28px rgba(0,0,0,.12);
-    }
-    #dataWrap{ overflow:auto; background:#fff; border-radius: 14px; }
-    table{ white-space: nowrap; }
-    /* yüzen kısayol butonları */
-    .fab{
-      position: fixed; bottom: 24px; z-index: 1031;
-      width: 52px; height: 52px; border-radius: 50%;
-      display: grid; place-items: center; box-shadow: 0 10px 20px rgba(0,0,0,.18);
-    }
-    .fab-left{ left: 24px; background: #0d6efd; color:#fff; }
-    .fab-right{ right: 24px; background: #6610f2; color:#fff; }
+    .navbar{ background: linear-gradient(90deg, var(--brand-start), var(--brand-end)); }
+    .hero{ background: linear-gradient(135deg, rgba(106,17,203,.12), rgba(37,117,252,.12));
+           border:1px solid rgba(0,0,0,.06); border-radius:20px; }
+    .card-hover{ transition: transform .18s, box-shadow .18s; border:0; border-radius:16px; }
+    .card-hover:hover{ transform: translateY(-4px); box-shadow:0 12px 28px rgba(0,0,0,.12); }
+    #dataWrap{ overflow:auto; background:#fff; border-radius:14px; }
+    table{ white-space:nowrap; }
+    th.sortable{ cursor:pointer; position:relative; }
+    th.sortable::after{ content:"↕"; font-size:.8rem; position:absolute; right:.5rem; opacity:.5; }
+    /* yüzen kısayollar */
+    .fab{ position:fixed; bottom:24px; z-index:1031; width:52px; height:52px; border-radius:50%;
+          display:grid; place-items:center; box-shadow:0 10px 20px rgba(0,0,0,.18); color:#fff; border:0; }
+    .fab-left{ left:24px; background:#0d6efd; }
+    .fab-right{ right:24px; background:#6610f2; }
   </style>
 </head>
 <body>
@@ -71,6 +55,12 @@
       <button class="btn btn-outline-light" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNotif">
         <i class="bi bi-bell"></i> Duyurular
       </button>
+
+      <!-- Tema anahtarı -->
+      <button id="themeBtn" class="btn btn-light" title="Tema">
+        <i class="bi bi-moon"></i>
+      </button>
+
       <button class="btn btn-light" id="logoutBtn"><i class="bi bi-box-arrow-right"></i> Çıkış</button>
     </div>
   </div>
@@ -80,8 +70,8 @@
 <section class="container my-4">
   <div class="p-5 text-center hero shadow-sm">
     <h1 class="display-6 fw-bold mb-2">Hoş geldin 🎉</h1>
-    <p class="text-muted mb-4">Soldan menüyü, sağdan duyuruları açabilir; aşağıda verilerini tabloya dökebilirsin.</p>
-    <a href="#icerik" class="btn btn-primary btn-lg"><i class="bi bi-chevron-down"></i> Keşfet</a>
+    <p class="text-muted mb-4">Solda menü, sağda duyurular; aşağıda verini yükle, ara/sırala ve grafik oluştur.</p>
+    <a href="#veri" class="btn btn-primary btn-lg"><i class="bi bi-chevron-down"></i> Başla</a>
   </div>
 </section>
 
@@ -92,7 +82,7 @@
       <div class="card card-hover text-white" style="background: linear-gradient(135deg,#00b09b,#96c93d);">
         <div class="card-body">
           <h5 class="card-title"><i class="bi bi-bar-chart"></i> Analitik</h5>
-          <p class="card-text mb-3">Toplanan verileri hızlıca keşfet.</p>
+          <p class="card-text mb-3">Tablo ve grafiğe hızlı erişim.</p>
           <a href="#veri" class="btn btn-light btn-sm">Veriye Git</a>
         </div>
       </div>
@@ -101,7 +91,7 @@
       <div class="card card-hover text-white" style="background: linear-gradient(135deg,#f7971e,#ffd200);">
         <div class="card-body">
           <h5 class="card-title"><i class="bi bi-grid-3x3-gap"></i> Modüller</h5>
-          <p class="card-text mb-3">Profil, ayarlar ve kısa yollar.</p>
+          <p class="card-text mb-3">Sekmeler, offcanvas, modal.</p>
           <button class="btn btn-light btn-sm" data-bs-toggle="modal" data-bs-target="#aboutModal">Hakkında</button>
         </div>
       </div>
@@ -110,7 +100,7 @@
       <div class="card card-hover text-white" style="background: linear-gradient(135deg,#7f00ff,#e100ff);">
         <div class="card-body">
           <h5 class="card-title"><i class="bi bi-wifi"></i> Canlı</h5>
-          <p class="card-text mb-3">Duyurular için sağ paneli kullan.</p>
+          <p class="card-text mb-3">Duyuruları sağ panelden takip et.</p>
           <button class="btn btn-light btn-sm" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNotif">Aç</button>
         </div>
       </div>
@@ -118,7 +108,7 @@
   </div>
 </section>
 
-<!-- TABLAR + VERİ YÜKLEME -->
+<!-- VERİ: TABLAR + GRAFİK -->
 <section class="container mb-5" id="veri">
   <ul class="nav nav-tabs" role="tablist">
     <li class="nav-item" role="presentation">
@@ -128,7 +118,7 @@
     </li>
     <li class="nav-item" role="presentation">
       <button class="nav-link" data-bs-toggle="tab" data-bs-target="#grafik" type="button" role="tab">
-        <i class="bi bi-graph-up"></i> Grafik (yakında)
+        <i class="bi bi-graph-up"></i> Grafik
       </button>
     </li>
   </ul>
@@ -136,11 +126,13 @@
   <div class="tab-content p-3 bg-white border border-top-0 rounded-bottom">
     <!-- TABLO -->
     <div class="tab-pane fade show active" id="tablo" role="tabpanel">
-      <div class="d-flex align-items-center gap-2 mb-3">
+      <div class="d-flex flex-wrap align-items-center gap-2 mb-3">
         <button id="loadBtn" class="btn btn-success"><i class="bi bi-upload"></i> Excel/CSV Yükle</button>
-        <span id="hint" class="text-muted">Henüz dosya seçilmedi.</span>
+        <input type="file" id="fileInput" accept=".xlsx,.csv" class="d-none">
+        <input type="text" id="searchInput" class="form-control" placeholder="Ara..." style="max-width:240px">
+        <button id="downloadCsv" class="btn btn-outline-secondary"><i class="bi bi-download"></i> CSV indir</button>
+        <span id="hint" class="text-muted ms-auto">Henüz dosya seçilmedi.</span>
       </div>
-      <input type="file" id="fileInput" accept=".xlsx,.csv" class="d-none">
       <div id="dataWrap" class="p-3 border">
         <table id="dataTable" class="table table-striped table-bordered table-sm align-middle mb-0"></table>
       </div>
@@ -148,7 +140,23 @@
 
     <!-- GRAFİK -->
     <div class="tab-pane fade" id="grafik" role="tabpanel">
-      <p class="text-muted">Bu sekmeye istersek Chart.js ile grafikler ekleyebiliriz.</p>
+      <div class="row g-3 align-items-end">
+        <div class="col-md-4">
+          <label class="form-label">X Ekseni (kategori)</label>
+          <select id="xSelect" class="form-select"></select>
+        </div>
+        <div class="col-md-4">
+          <label class="form-label">Y Ekseni (sayı)</label>
+          <select id="ySelect" class="form-select"></select>
+        </div>
+        <div class="col-md-4">
+          <button id="drawChart" class="btn btn-primary"><i class="bi bi-bar-chart-line"></i> Grafiği Çiz</button>
+        </div>
+      </div>
+      <div class="mt-4">
+        <canvas id="chartCanvas" height="120"></canvas>
+      </div>
+      <div class="text-muted mt-2">Not: Y ekseni için sayısal bir sütun seçmelisin.</div>
     </div>
   </div>
 </section>
@@ -162,7 +170,7 @@
   <div class="offcanvas-body">
     <div class="list-group">
       <a class="list-group-item list-group-item-action" href="#icerik"><i class="bi bi-stars"></i> Öne Çıkanlar</a>
-      <a class="list-group-item list-group-item-action" href="#veri"><i class="bi bi-table"></i> Veri Tablosu</a>
+      <a class="list-group-item list-group-item-action" href="#veri"><i class="bi bi-table"></i> Veri</a>
       <a class="list-group-item list-group-item-action" data-bs-toggle="modal" data-bs-target="#aboutModal"><i class="bi bi-info-circle"></i> Hakkında</a>
     </div>
   </div>
@@ -176,14 +184,8 @@
   </div>
   <div class="offcanvas-body">
     <div class="list-group">
-      <div class="list-group-item">
-        <div class="fw-semibold">Sürüm 1.0 yayınlandı</div>
-        <small class="text-muted">Yeni renkler ve paneller eklendi.</small>
-      </div>
-      <div class="list-group-item">
-        <div class="fw-semibold">Tablo iyileştirmesi</div>
-        <small class="text-muted">Excel/CSV daha hızlı aktarılıyor.</small>
-      </div>
+      <div class="list-group-item"><div class="fw-semibold">Sürüm 1.1</div><small class="text-muted">Koyu tema, arama ve grafik eklendi.</small></div>
+      <div class="list-group-item"><div class="fw-semibold">Tablo</div><small class="text-muted">Sütun tıklayınca sıralama.</small></div>
     </div>
   </div>
 </div>
@@ -197,7 +199,7 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
       </div>
       <div class="modal-body">
-        Bootstrap + SheetJS ile renkli ve etkileşimli bir demo. Solda menü, sağda duyurular, altta veri yükleme.
+        Renkli arayüz, offcanvas paneller, dosyadan Excel/CSV okuma, arama/sıralama ve Chart.js ile grafik.
       </div>
       <div class="modal-footer">
         <button class="btn btn-secondary" data-bs-dismiss="modal">Kapat</button>
@@ -213,6 +215,7 @@
 <!-- SCRIPTS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
   // Çıkış
   document.getElementById("logoutBtn").addEventListener("click", () => {
@@ -220,41 +223,46 @@
     window.location.href = "index.html";
   });
 
-  // Excel/CSV yükleme
+  // Tema (light/dark)
+  const themeBtn = document.getElementById('themeBtn');
+  const rootHtml = document.documentElement;
+  const savedTheme = localStorage.getItem('theme');
+  if (savedTheme) rootHtml.setAttribute('data-bs-theme', savedTheme);
+  themeBtn.addEventListener('click', () => {
+    const next = rootHtml.getAttribute('data-bs-theme') === 'light' ? 'dark' : 'light';
+    rootHtml.setAttribute('data-bs-theme', next);
+    localStorage.setItem('theme', next);
+    themeBtn.innerHTML = next === 'dark' ? '<i class="bi bi-sun"></i>' : '<i class="bi bi-moon"></i>';
+  });
+  themeBtn.dispatchEvent(new Event('click')); themeBtn.dispatchEvent(new Event('click')); // ikonu senkronla
+
+  // Excel/CSV yükleme + tablo + arama + sıralama + CSV indir
   const loadBtn   = document.getElementById('loadBtn');
   const fileInput = document.getElementById('fileInput');
   const dataTable = document.getElementById('dataTable');
   const hint      = document.getElementById('hint');
+  const searchInput = document.getElementById('searchInput');
+  const downloadCsv = document.getElementById('downloadCsv');
+
+  let rows = [];        // [ [h1,h2,...], [r1c1,r1c2,...], ... ]
+  let filtered = [];    // arama sonrası
+  let sortState = { index: -1, dir: 1 };
 
   loadBtn.addEventListener('click', () => fileInput.click());
 
   fileInput.addEventListener('change', async (e) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
+    const file = e.target.files?.[0]; if (!file) return;
     hint.textContent = 'Yükleniyor...';
 
     try {
       const buffer = await file.arrayBuffer();
-      const wb = XLSX.read(buffer, { type: 'array' });
+      const wb = XLSX.read(buffer, { type:'array' });
       const sheet = wb.Sheets[wb.SheetNames[0]];
-      const rows = XLSX.utils.sheet_to_json(sheet, { header: 1 });
-      if (!rows.length){ hint.textContent='Boş dosya'; dataTable.innerHTML=''; return; }
-
-      const thead = rows[0];
-      let html = '<thead><tr>';
-      thead.forEach(h => html += `<th>${(h ?? '').toString()}</th>`);
-      html += '</tr></thead><tbody>';
-      for(let i=1;i<rows.length;i++){
-        html += '<tr>';
-        const r = rows[i];
-        for(let j=0;j<thead.length;j++){
-          html += `<td>${(r?.[j] ?? '').toString()}</td>`;
-        }
-        html += '</tr>';
-      }
-      html += '</tbody>';
-      dataTable.innerHTML = html;
+      rows = XLSX.utils.sheet_to_json(sheet, { header:1 }) || [];
+      renderTable(rows);
+      populateSelects(); // grafik için
       hint.textContent = `Yüklendi: ${file.name}`;
+      showToast('Dosya yüklendi', file.name);
     } catch (err){
       console.error(err);
       hint.textContent = 'Okuma hatası. Lütfen .xlsx veya .csv deneyin.';
@@ -263,6 +271,119 @@
       fileInput.value = '';
     }
   });
+
+  function renderTable(source){
+    if (!source.length){ dataTable.innerHTML=''; return; }
+    filtered = source.slice(); // kopya
+    const thead = filtered[0];
+    let html = '<thead><tr>';
+    thead.forEach((h,i)=> html += `<th class="sortable" data-idx="${i}">${(h??'').toString()}</th>`);
+    html += '</tr></thead><tbody>';
+    for(let i=1;i<filtered.length;i++){
+      html += '<tr>';
+      const r = filtered[i] || [];
+      for(let j=0;j<thead.length;j++){
+        html += `<td>${(r?.[j] ?? '').toString()}</td>`;
+      }
+      html += '</tr>';
+    }
+    html += '</tbody>';
+    dataTable.innerHTML = html;
+
+    // sıralama
+    dataTable.querySelectorAll('th.sortable').forEach(th=>{
+      th.addEventListener('click', ()=>{
+        const idx = +th.dataset.idx;
+        sortState.dir = (sortState.index === idx) ? -sortState.dir : 1;
+        sortState.index = idx;
+        filtered = [filtered[0]].concat(
+          filtered.slice(1).sort((a,b)=>{
+            const A = a?.[idx] ?? '', B = b?.[idx] ?? '';
+            const aNum = parseFloat(A), bNum = parseFloat(B);
+            const isNum = !isNaN(aNum) && !isNaN(bNum);
+            return (isNum ? (aNum-bNum) : (A.toString().localeCompare(B.toString()))) * sortState.dir;
+          })
+        );
+        renderTable(filtered);
+      });
+    });
+  }
+
+  // arama
+  searchInput.addEventListener('input', ()=>{
+    const q = searchInput.value.trim().toLowerCase();
+    if (!rows.length){ return; }
+    if (!q){ renderTable(rows); return; }
+    const head = rows[0];
+    const body = rows.slice(1).filter(r => r && r.some(c => (c??'').toString().toLowerCase().includes(q)));
+    renderTable([head, ...body]);
+  });
+
+  // CSV indir
+  downloadCsv.addEventListener('click', ()=>{
+    if (!filtered.length){ return; }
+    const csv = filtered.map(r => (r||[]).map(val=>{
+      const s = (val??'').toString().replace(/"/g,'""');
+      return /[",\n]/.test(s) ? `"${s}"` : s;
+    }).join(',')).join('\n');
+    const blob = new Blob([csv], {type:'text/csv;charset=utf-8;'});
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'veri.csv';
+    a.click();
+    URL.revokeObjectURL(a.href);
+  });
+
+  // Toast (mini bildirim)
+  function showToast(title, body){
+    const wrap = document.createElement('div');
+    wrap.className = 'toast-container position-fixed top-0 end-0 p-3';
+    wrap.innerHTML = `
+      <div class="toast align-items-center text-bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="d-flex">
+          <div class="toast-body"><b>${title}</b><div class="small">${body||''}</div></div>
+          <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+        </div>
+      </div>`;
+    document.body.appendChild(wrap);
+    const t = new bootstrap.Toast(wrap.querySelector('.toast'), {delay:2200});
+    t.show();
+    setTimeout(()=>wrap.remove(), 2600);
+  }
+
+  // ===== Grafik (Chart.js) =====
+  let chart, headers=[];
+  const xSelect = document.getElementById('xSelect');
+  const ySelect = document.getElementById('ySelect');
+  const drawBtn = document.getElementById('drawChart');
+
+  function populateSelects(){
+    if (!rows.length){ xSelect.innerHTML=''; ySelect.innerHTML=''; return; }
+    headers = rows[0].map(h => (h??'').toString());
+    xSelect.innerHTML = headers.map((h,i)=>`<option value="${i}">${h||('Sütun '+(i+1))}</option>`).join('');
+    ySelect.innerHTML = headers.map((h,i)=>`<option value="${i}">${h||('Sütun '+(i+1))}</option>`).join('');
+    if (headers.length>=2){ xSelect.value = 0; ySelect.value = 1; }
+  }
+
+  drawBtn.addEventListener('click', ()=>{
+    if (!rows.length){ showToast('Önce dosya yükleyin'); return; }
+    const xi = +xSelect.value, yi = +ySelect.value;
+    const labels = rows.slice(1).map(r => (r?.[xi] ?? '').toString());
+    const rawY = rows.slice(1).map(r => parseFloat(r?.[yi]));
+    const yVals = rawY.map(v => isNaN(v)? null : v);
+    if (yVals.every(v => v===null)){ showToast('Y ekseni sayısal olmalı'); return; }
+
+    const ctx = document.getElementById('chartCanvas').getContext('2d');
+    if (chart) chart.destroy();
+    chart = new Chart(ctx, {
+      type: 'bar',
+      data: { labels, datasets:[{ label: headers[yi]||'Değer', data: yVals }] },
+      options: { responsive:true, scales:{ y:{ beginAtZero:true } } }
+    });
+  });
 </script>
 </body>
 </html>
+
+
+
