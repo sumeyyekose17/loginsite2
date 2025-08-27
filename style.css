@@ -1,0 +1,13 @@
+/* satır sonuna ekle */
+.inline { display: inline-flex; align-items: center; gap: 8px; font-size: .9rem; color:#555; }
+.inline input[type="checkbox"] { transform: translateY(1px); }
+
+.hint { display:none; color:#b33; font-weight:600; font-size:.9rem; }
+
+@keyframes shake-kf {
+  10%, 90% { transform: translateX(-2px); }
+  20%, 80% { transform: translateX(4px); }
+  30%, 50%, 70% { transform: translateX(-6px); }
+  40%, 60% { transform: translateX(6px); }
+}
+.shake { animation: shake-kf .4s; }

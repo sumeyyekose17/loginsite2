@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Giriş</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body class="center">
+  <div class="card" id="card">
+    <h1>Giriş Yap</h1>
+
+    <form id="loginForm">
+      <label>Kullanıcı Adı
+        <input type="text" id="username" autocomplete="username" required />
+      </label>
+
+      <label>Şifre
+        <input type="password" id="password" autocomplete="current-password" required />
+      </label>
+
+      <!-- küçük ekler -->
+      <label class="inline">
+        <input type="checkbox" id="showPwd" />
+        Şifreyi göster
+      </label>
+
+      <label class="inline">
+        <input type="checkbox" id="rememberMe" />
+        Beni hatırla
+      </label>
+
+      <div id="capsMsg" class="hint">Caps Lock açık olabilir</div>
+
+      <button type="submit" id="loginBtn">Giriş</button>
+      <p id="msg" class="msg"></p>
+    </form>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
